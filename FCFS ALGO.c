@@ -17,11 +17,11 @@ int main(){
 	
 	 for( i=0;i<n;i++)
 	 {
-	 	process[n].arrival=0;
-	 	process[n].burst=0;
-	 	process[n].completion=0;
-	 	process[n].turnaround=0;
-	 	process[n].waiting=0;
+	 	process[i].arrival=0;
+	 	process[i].burst=0;
+	 	process[i].completion=0;
+	 	process[i].turnaround=0;
+	 	process[i].waiting=0;
 	 	
 	 }
 	printf("Enter arrival time and burst time for each process\n\n");
@@ -45,10 +45,10 @@ int main(){
 	for(j=0;j<n;j++)
 	{
 		sum+=process[j].burst;
-		printf("\n sun %d \n",sum);
+	//	printf("\n sun %d \n",sum);
 		temp=sum;
 		process[j].completion+=temp;
-	printf("\n completion  %d , j=%d \n",process[j].completion,j);
+//	printf("\n completion  %d , j=%d \n",process[j].completion,j);
 	}	
 
 	//calculate turnaround time and waiting times 
