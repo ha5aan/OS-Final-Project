@@ -9,7 +9,7 @@ int main(){
 
 	cout<<"Enter number of processes	";
 	cin>>n;
-	int burstTime[n+1]={0},arrivalTime[n+1]={0},turnaroundTime[n+1]={0},waitingTime[n+1]={0},completionTime[n+1]={0};
+	int burstTime[n]={0},arrivalTime[n]={0},turnaroundTime[n]={0},waitingTime[n]={0},completionTime[n]={0};
 	cout<<"Enter arrival time and burst time for each process\n\n";
 	
 
