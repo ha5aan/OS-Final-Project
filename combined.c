@@ -264,13 +264,13 @@ int main(){
 		scanf("%d",&process[i].burst);
 		rt[i]=process[i].burst;
 		
-		printf("Enter Priority of process %d : ",i+1);
+		printf("Enter Priority of process %d(1 means highest priority) : ",i+1);
 		scanf("%d",&pr[i]);
 		p[i]=i+1;
 		burst_time[i]=process[i].burst;
 		temp[i]=burst_time[i];
 	}
-	printf("Enter time quantum for Round Robin: \n");
+	printf("\nEnter time quantum for Round Robin: \n");
 	scanf("%d",&time_quantum);
 
 
