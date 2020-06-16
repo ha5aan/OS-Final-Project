@@ -1,79 +1,141 @@
-#include<stdio.h>
+#include <linux/kernel.h>
+
+
 struct p_data
 {
-	int burst,arrival,turnaround,waiting,completion;
+	int burst;
+	int arrival;
+	int turnaround;
+	int waiting;
+	int completion;
 };
 
 struct times{
-	float totalwt,totaltat;
+	int totalwt;
+	int totaltat;
 };
-////////////////////////////////////////////// FIRST COME FIRST SERVE ALGORITHM///////////////////////////////////////////////////////////////////
 
-struct times FCFS(struct p_data calc[], int n)
-{ 
-  printf("///////////////////////////////////////////////////////////////////////////////////////////////////////////////");
-	printf("\n\n\tThis is the starting of First Come First Serve \n\n");
-	int i,j,temp,sum=0;
+
+
+
+
+asmlinkage long sys_finalproject(int a1, int b1,int p1,int a2, int b2,int p2,int a3, int b3,int p3,int a4, int b4,int p4,int a5, int b5,int p5){
+	struct times rr;
+
+	int n;
+	int time_quantum;
+	struct p_data calc[5];	
+        int average_turnaround_time;
+        int average_waiting_time ;
+	int smallest=0; 
+	int k=0;
+	int j=0; 
+	int end=0; 
+	int turnaround_time=0;
+    	
+	int burst_time[5];
+	int arrival_time[5];
+	int i;
+	int temp[5];
+	int pr[5];
+	int p[5];
+	struct p_data process[5];
+	int rt[5];
+	int wait_time=0;
+        struct times sjf; //d			
+int a;
+int b;
+	int temp1;
+	int sum;
+int time;
+int remain;
+int flag=0;
+	
 	struct times fcfs;
-	fcfs.totaltat=0;
-	fcfs.totalwt=0;
+
+	int total=0;
+	int pos;
+	int avgwait;
+	int avgtat;
+	 struct times pq;
+	struct p_data t[5];
+
+	int count;
+	struct p_data t2[7];
 	
 
-		
-	//calculate completion time of calces 	
-
-	for(j=0;j<n;j++)
-	{
-		sum+=calc[j].burst;
-	//	printf("\n sun %d \n",sum);
-		temp=sum;
-		calc[j].completion+=temp;
-
-	}	
-
-	//calculate turnaround time and waiting times 
-
-	int k;
+	printk("Number of we have processes are 	");
+	n=5;	
+	printk("5\n");
 	
-	for(k=0;k<n;k++)
-	{
-		calc[k].turnaround=calc[k].completion-calc[k].arrival;
-		fcfs.totaltat+=calc[k].turnaround;
-	}
-
-	
-	
-	for( k=0;k<n;k++)
-	{
-		calc[k].waiting =calc[k].turnaround -calc[k].burst;
-		fcfs.totalwt+=calc[k].waiting;
-
-	
-	}
-	
-	printf("\n\n");
-	printf("\t\t The breakdown of time for FCFS is as follows\n");
-	printf("Process#\tArrivatTime\tBursttime\tCompletionTime\tTurnAroundTime\tWaitingTime\t\n");
 	
 	for(i=0;i<n;i++)
-	{
-	printf("P[%d]\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",i+1,calc[i].arrival,calc[i].burst,calc[i].completion,calc[i].turnaround,calc[i].waiting);
-	}
-		
-	printf("\n\nAverage Turnaround Time for FCFS =%0.3f",fcfs.totaltat);
-	printf("\nAverage waiting time for FCFS =%0.3f \n",fcfs.totalwt);
-	printf("\n\t\tThis is the ending of First Come First Serve \n");
-	return fcfs;
-	
-}
+	 {
+	 	process[i].arrival=0;
+	 	process[i].burst=0;
+	 	process[i].completion=0;
+	 	process[i].turnaround=0;
+	 	process[i].waiting=0;
+	 	
+	 }
 
-struct times shortest_J_F( int burst_time[],int arrival_time[],int temp[] ,int n)
-{
-////////////////////////////////////////////// SHORTEST JOB FIRST ALGORITHM///////////////////////////////////////////////////////////////////
-printf("/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
-	printf("\n\n\tThis is the starting of Shortest Job First\n\n");
-int i=0, smallest=0, k=0, j=0, end=0, turnaround_time=0;
-    float average_turnaround_time , average_waiting_time  , wait_time=0;
+
+		process[0].arrival=a1;
+	 	process[0].burst=b1;
+		pr[0]=p1;
+	
+		process[1].arrival=a2;
+	 	process[1].burst=b2;
+		pr[1]=p2;		
+
+		process[2].arrival=a3;
+	 	process[2].burst=b3;
+		pr[2]=p3;
+
+		process[3].arrival=a4;
+	 	process[3].burst=b4;
+		pr[3]=p4;		
+
+		process[4].arrival=a5;
+	 	process[4].burst=b5;
+		pr[4]=p5;
+
+		
+time_quantum=5;
+	
+	for( i=0;i<n;i++)
+	{
+
+		printk("\nArrival time of process %d :  ",i+1);
+		a=process[i].arrival;
+		printk("%d", a);
+		arrival_time[i]=process[i].arrival;
+		
+		
+		printk("\nburst time of process %d : ",i+1);
+		b=process[i].burst;
+		printk("%d",b);
+		rt[i]=process[i].burst;
+		
+		printk("\nPriority of process %d(1 means highest priority) : ",i+1);
+		printk("%d",pr[i]);
+		p[i]=i+1;
+		burst_time[i]=process[i].burst;
+		temp[i]=burst_time[i];
+printk("\n\n");
+	}
+	printk("\nTime quantum for Round Robin: \n");
+	printk("%d\n",time_quantum);
+
+
+
+/////////////////////////////////////////////// SHORTEST JOB FIRST ALGORITHM///////////////////////////////////////////////////////////////////
+printk("/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
+	printk("\n\n\tThis is the starting of Shortest Job First\n\n");
+ i=0; 
+    average_turnaround_time=0;
+		average_waiting_time=0; 
+
 
  burst_time[n] = 9999;  
       for(j = 0; k != n; j++)
@@ -99,26 +161,88 @@ int i=0, smallest=0, k=0, j=0, end=0, turnaround_time=0;
        
        average_waiting_time = wait_time / n; 
       average_turnaround_time = turnaround_time / n;
-      printf("\n\"Break down in tabular form not present because according to our algorithm it is impossible to print a table\"\n");
-      printf("\n\nAverage Waiting Time for Shortest Job First = %0.3f ", average_waiting_time);
-      printf("\nAverage Turnaround Time for Shortest Job First = %0.3f", average_turnaround_time);
-    struct times sjf;
+      printk("\n\"Break down in tabular form not present because according to our algorithm it is impossible to print a table\"\n");
+      printk("\n\nAverage Waiting Time for Shortest Job First = %d ", average_waiting_time);
+      printk("\nAverage Turnaround Time for Shortest Job First = %d", average_turnaround_time);
+
     sjf.totaltat=average_turnaround_time;
     sjf.totalwt=average_waiting_time;
-	printf("\n\t\tThis is the ending of Shortest Job First\n");
-    	return sjf;
+	printk("\n\t\tThis is the ending of Shortest Job First\n");
+
+
+
+  	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	fcfs.totaltat=0;
+	fcfs.totalwt=0;
+printk("///////////////////////////////////////////////////////////////////////////////////////////////////////////////");
+	printk("\n\n\tThis is the starting of First Come First Serve \n\n");
+sum=0;	
+
+for(i=0;i<7;i++)
+{
+
+calc[i]=process[i];
+}
+		
+	//calculate completion time of calces 	
+
+	for(j=0;j<n;j++)
+	{
+		sum+=calc[j].burst;
+	//	printk("\n sun %d \n",sum);
+		temp1=sum;
+		calc[j].completion+=temp1;
+
+	}	
+
+	//calculate turnaround time and waiting times 
+
+	 
 	
+	for(k=0;k<n;k++)
+	{
+		calc[k].turnaround=calc[k].completion-calc[k].arrival;
+		fcfs.totaltat+=calc[k].turnaround;
+	}
+
+	
+	
+	for( k=0;k<n;k++)
+	{
+		calc[k].waiting =calc[k].turnaround -calc[k].burst;
+		fcfs.totalwt+=calc[k].waiting;
+
+	
+	}
+	
+	printk("\n\n");
+	printk("\t\t The breakdown of time for FCFS is as follows\n");
+	printk("Process#\tArrivatTime\tBursttime\tCompletionTime\tTurnAroundTime\tWaitingTime\t\n");
+	
+	for(i=0;i<n;i++)
+	{
+	printk("P[%d]\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",i+1,calc[i].arrival,calc[i].burst,calc[i].completion,calc[i].turnaround,calc[i].waiting);
+	}
+		
+	printk("\n\nAverage Turnaround Time for FCFS =%d",fcfs.totaltat);
+	printk("\nAverage waiting time for FCFS =%d \n",fcfs.totalwt);
+	printk("\n\t\tThis is the ending of First Come First Serve \n");
+
+
+////////////////////////////////////////////// PRIORITY SCHEDULING ALGORITHM///////////////////////////////////////////////////////////////////
+printk("///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
+printk("\n\n\tThis is the starting of Priority Secheduling\n\n");
+
+
+for(i=0;i<7;i++)
+{
+
+t[i]=process[i];
 }
 
-struct times Priority_Sech(struct p_data t[], int n, int pr[],int p[])
-{
-////////////////////////////////////////////// PRIORITY SCHEDULING ALGORITHM///////////////////////////////////////////////////////////////////
-printf("///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
-printf("\n\n\tThis is the starting of Priority Secheduling\n\n");
 
-int i,j,total=0,pos,temp;
-float avgwait,avgtat;
- struct times priority;
+
  for(i=0;i<n;i++)
     {
         pos=i;
@@ -128,17 +252,17 @@ float avgwait,avgtat;
                 pos=j;
         }
  
-        temp=pr[i];
+        temp1=pr[i];
         pr[i]=pr[pos];
-        pr[pos]=temp;
+        pr[pos]=temp1;
  
-        temp=t[i].burst;
+        temp1=t[i].burst;
         t[i].burst=t[pos].burst;
-        t[pos].burst=temp;
+        t[pos].burst=temp1;
  
-        temp=p[i];
+        temp1=p[i];
         p[i]=p[pos];
-        p[pos]=temp;
+        p[pos]=temp1;
     }
  
     t[0].waiting=0;	//Waiting time for first process is zero
@@ -156,37 +280,45 @@ float avgwait,avgtat;
     avgwait=total/n;      //average Waiting time
     total=0;
  
-    printf("\nProcess\t    Burst Time    \tWaiting Time\tTurnaround Time");
+    printk("\nProcess\t    Burst Time    \tWaiting Time\tTurnaround Time");
     for(i=0;i<n;i++)
     {
        t[i].turnaround=t[i].burst+t[i].waiting;     //calculate turnaround time
         total+=t[i].turnaround;
-        printf("\nP[%d]\t\t  %d\t\t    %d\t\t\t%d",p[i],t[i].burst,t[i].waiting,t[i].turnaround);
+        printk("\nP[%d]\t\t  %d\t\t    %d\t\t\t%d",p[i],t[i].burst,t[i].waiting,t[i].turnaround);
     }
  
     avgtat=total/n;     //average turnaround time
-    printf("\nAverage Waiting Time=%0.3f",avgwait);
-    printf("\nAverage Turnaround Time=%0.3f\n",avgtat);
+    printk("\nAverage Waiting Time=%d",avgwait);
+    printk("\nAverage Turnaround Time=%d\n",avgtat);
  
- priority.totaltat=avgtat;
- priority.totalwt=avgwait;
+ pq.totaltat=avgtat;
+ pq.totalwt=avgwait;
  
 
- printf("\n\t\tThis is the ending of Priority Secheduling\n");
-	return priority;
+ printk("\n\t\tThis is the ending of Priority Secheduling\n");
 
+
+
+  printk("//////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
+  printk("\n\n\tThis is the Starting of Round Robin\n\n");
+
+for(i=0;i<7;i++)
+{
+
+t2[i]=process[i];
 }
 
-////////////////////////////////////////////// ROUND-ROBIN ALGORITHM///////////////////////////////////////////////////////////////////
-struct times round_robin(struct p_data t[],int n,int rt[],int time_quantum)
-{
-  printf("//////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
-  printf("\n\n\tThis is the Starting of Round Robin\n\n");
-int count,j,time,remain,flag=0; 
-  float wait_time=0,turnaround_time=0; 
+
+
+
+ 
+
+ wait_time=0;
+turnaround_time=0; 
   remain=n; 
   
-	printf("\n\nProcess\t|Turnaround Time|Waiting Time\n\n"); // UNDER THIS TABLE IS THE BREAKDOWN
+	printk("\n\nProcess\t|Turnaround Time|Waiting Time\n\n"); // UNDER THIS TABLE IS THE BREAKDOWN
   for(time=0,count=0;remain!=0;) 
   { 
     if(rt[count]<=time_quantum && rt[count]>0) 
@@ -203,85 +335,39 @@ int count,j,time,remain,flag=0;
     if(rt[count]==0 && flag==1) 
     { 
       remain--; 
-      printf("P[%d]\t|\t%d\t|\t%d\n",count+1,time-t[count].arrival,time-t[count].arrival-t[count].burst); 
-      wait_time+=time-t[count].arrival-t[count].burst; 
-      turnaround_time+=time-t[count].arrival; 
+      printk("P[%d]\t|\t%d\t|\t%d\n",count+1,time-t2[count].arrival,time-t2[count].arrival-t2[count].burst); 
+      wait_time+=time-t2[count].arrival-t2[count].burst; 
+      turnaround_time+=time-t2[count].arrival; 
       flag=0; 
     } 
     if(count==n-1) 
       count=0; 
-    else if(t[count+1].arrival<=time) 
+    else if(t2[count+1].arrival<=time) 
       count++; 
     else 
       count=0; 
   } 
-  printf("\nAverage Waiting Time= %0.3f",wait_time*1.0/n); 
-  printf("\nAvg Turnaround Time = %0.3f",turnaround_time*1.0/n); 
-  struct times tim;
-  tim.totaltat=turnaround_time*1.0/n;
-  tim.totalwt=wait_time*1.0/n;
-  printf("\n\t\tThis is the ending of Round Robin\n");
-  return tim;
+
   
-}
-
-int main(){
-
-	int n,time_quantum;
-	
-    float average_turnaround_time , average_waiting_time  , wait_time=0;
-		
-
-	printf("Enter number of processes	");
-	scanf("%d",&n);
-	int burst_time[n],arrival_time[n] ,i=0,temp[n],pr[n],p[n];
-	struct p_data process[n];
-	int rt[n];
-
-	
-	for( i=0;i<n;i++)
-	 {
-	 	process[i].arrival=0;
-	 	process[i].burst=0;
-	 	process[i].completion=0;
-	 	process[i].turnaround=0;
-	 	process[i].waiting=0;
-	 	
-	 }
-	
-	
-	
-	
-	for( i=0;i<n;i++)
-	{
-
-		printf("\nArrival time of process %d : ",i+1);
-		scanf("%d", &process[i].arrival);
-		arrival_time[i]=process[i].arrival;
-		
-		
-		printf("Enter the burst time of process %d : ",i+1);
-		scanf("%d",&process[i].burst);
-		rt[i]=process[i].burst;
-		
-		printf("Enter Priority of process %d(1 means highest priority) : ",i+1);
-		scanf("%d",&pr[i]);
-		p[i]=i+1;
-		burst_time[i]=process[i].burst;
-		temp[i]=burst_time[i];
-	}
-	printf("\nEnter time quantum for Round Robin: \n");
-	scanf("%d",&time_quantum);
+  
+  rr.totaltat=turnaround_time/n;
+  rr.totalwt=wait_time/n;
+  printk("\nAverage Waiting Time= %d",rr.totalwt); 
+  printk("\nAvg Turnaround Time = %d",rr.totaltat);   
 
 
-struct times fcfs	=	FCFS(process,n);	//a
-struct times pq= Priority_Sech(process,n,pr,p);//b
-struct times rr= round_robin(process,n,rt,time_quantum);//c		
-struct times sjf = shortest_J_F(burst_time,arrival_time,temp,n);//d
+printk("\n\t\tThis is the ending of Round Robin\n");
 
 
-printf("\n\nThe maximun turnaround and waiting times are as follows:\n");
-printf("''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''\n");
+
+
+
+
+
+
+
+printk("\n\nThe maximun turnaround and waiting times are as follows:\n");
+printk("''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''\n");
 
 if(fcfs.totaltat>pq.totaltat)
 {
@@ -289,10 +375,10 @@ if(fcfs.totaltat>pq.totaltat)
   {
     if(fcfs.totaltat>sjf.totaltat)
     {
-      printf("\nThe maximun turnaround time is taken by First Come First Serve Algorithm : %0.3f ", fcfs.totaltat);
+      printk("\nThe maximun turnaround time is taken by First Come First Serve Algorithm : %d ", fcfs.totaltat);
     }
     else{
-      printf("\nThe maximun turnaround time is taken by Shortest Job First Algorithm : %0.3f " ,sjf.totaltat);
+      printk("\nThe maximun turnaround time is taken by Shortest Job First Algorithm : %d " ,sjf.totaltat);
     }
   }
 }
@@ -300,21 +386,21 @@ else if(pq.totaltat>rr.totaltat)
 {
   if(pq.totaltat>sjf.totaltat)
   {
-          printf("\nThe maximun turnaround time is taken by Priority Queue Serve Algorithm : %0.3f ", pq.totaltat);
+          printk("\nThe maximun turnaround time is taken by Priority Queue Serve Algorithm : %d ", pq.totaltat);
 
   }
   else
   {
-          printf("\nThe maximun turnaround time is taken by Shortest Job First Algorithm : %0.3f " ,sjf.totaltat);
+          printk("\nThe maximun turnaround time is taken by Shortest Job First Algorithm : %d " ,sjf.totaltat);
 
   }
 
 }
 else if(rr.totaltat>sjf.totaltat)
 {
-          printf("\nThe maximun turnaround time is taken by Round Robin Algorithm : %0.3f " ,rr.totaltat);
+          printk("\nThe maximun turnaround time is taken by Round Robin Algorithm : %d " ,rr.totaltat);
 }	else {
-            printf("\nThe maximun turnaround time is taken by Shortest Job First Algorithm : %0.3f " ,sjf.totaltat);
+            printk("\nThe maximun turnaround time is taken by Shortest Job First Algorithm : %d " ,sjf.totaltat);
 
 }
   
@@ -324,10 +410,10 @@ if(fcfs.totalwt>pq.totalwt)
   {
     if(fcfs.totalwt>sjf.totalwt)
     {
-      printf("\nThe maximun waiting time is taken by First Come First Serve Algorithm : %0.3f ", fcfs.totalwt);
+      printk("\nThe maximun waiting time is taken by First Come First Serve Algorithm : %d ", fcfs.totalwt);
     }
     else{
-      printf("\nThe maximun waiting time is taken by Shortest Job First Algorithm : %0.3f " ,sjf.totalwt);
+      printk("\nThe maximun waiting time is taken by Shortest Job First Algorithm : %d " ,sjf.totalwt);
     }
   }
 }
@@ -335,36 +421,36 @@ else if(pq.totalwt>rr.totalwt)
 {
   if(pq.totalwt>sjf.totalwt)
   {
-          printf("\nThe maximun waiting time is taken by Priority Queue Serve Algorithm : %0.3f ", pq.totalwt);
+          printk("\nThe maximun waiting time is taken by Priority Queue Serve Algorithm : %d ", pq.totalwt);
 
   }
   else
   {
-          printf("\nThe maximun waiting time is taken by Shortest Job First Algorithm : %0.3f " ,sjf.totalwt);
+          printk("\nThe maximun waiting time is taken by Shortest Job First Algorithm : %d " ,sjf.totalwt);
 
   }
 
 }
 else if(rr.totalwt>sjf.totalwt)
 {
-          printf("\nThe maximun waiting time is taken by Round Robin Algorithm : %0.3f " ,rr.totalwt);
+          printk("\nThe maximun waiting time is taken by Round Robin Algorithm : %d " ,rr.totalwt);
 }	else {
-            printf("\nThe maximun waiting time is taken by Shortest Job First Algorithm : %0.3f " ,sjf.totalwt);
+            printk("\nThe maximun waiting time is taken by Shortest Job First Algorithm : %d " ,sjf.totalwt);
 
 }
 
-printf("\n\nThe minimun turnaround and waiting times are as follows:\n");
-printf("''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''\n");
+printk("\n\nThe minimun turnaround and waiting times are as follows:\n");
+printk("''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''\n");
 if(fcfs.totaltat<pq.totaltat)
 {
   if(fcfs.totaltat<rr.totaltat)
   {
     if(fcfs.totaltat<sjf.totaltat)
     {
-      printf("\nThe minimun turnaround time is taken by First Come First Serve Algorithm : %0.3f ", fcfs.totaltat);
+      printk("\nThe minimun turnaround time is taken by First Come First Serve Algorithm : %d ", fcfs.totaltat);
     }
     else{
-      printf("\nThe minimun turnaround time is taken by Shortest Job First Algorithm : %0.3f " ,sjf.totaltat);
+      printk("\nThe minimun turnaround time is taken by Shortest Job First Algorithm : %d " ,sjf.totaltat);
     }
   }
 }
@@ -372,21 +458,21 @@ else if(pq.totaltat<rr.totaltat)
 {
   if(pq.totaltat<sjf.totaltat)
   {
-          printf("\nThe minimun turnaround time is taken by Priority Queue Serve Algorithm : %0.3f ", pq.totaltat);
+          printk("\nThe minimun turnaround time is taken by Priority Queue Serve Algorithm : %d ", pq.totaltat);
 
   }
   else
   {
-          printf("\nThe minimun turnaround time is taken by Shortest Job First Algorithm : %0.3f " ,sjf.totaltat);
+          printk("\nThe minimun turnaround time is taken by Shortest Job First Algorithm : %d " ,sjf.totaltat);
 
   }
 
 }
 else if(rr.totaltat<sjf.totaltat)
 {
-          printf("\nThe minimun turnaround time is taken by Round Robin Algorithm : %0.3f " ,rr.totaltat);
+          printk("\nThe minimun turnaround time is taken by Round Robin Algorithm : %d " ,rr.totaltat);
 }	else {
-            printf("\nThe minimun turnaround time is taken by Shortest Job First Algorithm : %0.3f " ,sjf.totaltat);
+            printk("\nThe minimun turnaround time is taken by Shortest Job First Algorithm : %d " ,sjf.totaltat);
 
 }
 
@@ -397,10 +483,10 @@ if(fcfs.totalwt<pq.totalwt)
   {
     if(fcfs.totalwt<sjf.totalwt)
     {
-      printf("\nThe minimun waiting time is taken by First Come First Serve Algorithm : %0.3f ", fcfs.totalwt);
+      printk("\nThe minimun waiting time is taken by First Come First Serve Algorithm : %d ", fcfs.totalwt);
     }
     else{
-      printf("\nThe minimun waiting time is taken by Shortest Job First Algorithm : %0.3f " ,sjf.totalwt);
+      printk("\nThe minimun waiting time is taken by Shortest Job First Algorithm : %d " ,sjf.totalwt);
     }
   }
 }
@@ -408,25 +494,25 @@ else if(pq.totalwt<rr.totalwt)
 {
   if(pq.totalwt<sjf.totalwt)
   {
-          printf("\nThe minimun waiting time is taken by Priority Queue Serve Algorithm : %0.3f ", pq.totalwt);
+          printk("\nThe minimun waiting time is taken by Priority Queue Serve Algorithm : %d ", pq.totalwt);
 
   }
   else
   {
-          printf("\nThe minimun waiting time is taken by Shortest Job First Algorithm : %0.3f " ,sjf.totalwt);
+          printk("\nThe minimun waiting time is taken by Shortest Job First Algorithm : %d " ,sjf.totalwt);
 
   }
 
 }
 else if(rr.totalwt<sjf.totalwt)
 {
-          printf("\nThe minimun waiting time is taken by Round Robin Algorithm : %0.3f " ,rr.totalwt);
+          printk("\nThe minimun waiting time is taken by Round Robin Algorithm : %d " ,rr.totalwt);
 }	else {
-            printf("\nThe minimun waiting time is taken by Shortest Job First Algorithm : %0.3f " ,sjf.totalwt);
+            printk("\nThe minimun waiting time is taken by Shortest Job First Algorithm : %d " ,sjf.totalwt);
 
 }
 
-printf("\n");
+printk("\n");
 
   return 0;
 }
